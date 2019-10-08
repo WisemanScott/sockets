@@ -1,40 +1,51 @@
-// The skeleton program for Server
+// A Java program for a Server
 import java.net.*;
 import java.io.*;
 
 public class Server
-{       //input stream defined    
-    private Socket socket  = null;
-    private ServerSocket server = null;
-    private DataInputStream in = null;
-        //constructor
-    public Server (int port)
+{
+    //initialize socket and input stream
+    private Socket          socket   = null;
+    private ServerSocket    server   = null;
+    private DataInputStream in       =  null;
+
+    // constructor with port
+    public Server(int port)
     {
+        // starts server and waits for a connection
         try
         {
             server = new ServerSocket(port);
             System.out.println("Server started");
 
-            System.out.println("Waiting for a client to connect...");
+            System.out.println("Waiting for a client ...");
 
-            socket = server .accept();
-            System.out.println("Client connection accepted");
+            socket = server.accept();
+            System.out.println("Client accepted");
 
-            in = new DataInputStream(new BufferednputStream(socket.getInputStream()));
+            // takes input from the client socket
+            in = new DataInputStream(
+                new BufferedInputStream(socket.getInputStream()));
+
             String line = "";
 
-            while(!line.equals("Over"))
+            // reads message from client until "Over" is sent
+            while (!line.equals("Over"))
             {
-                try 
+                try
                 {
-                line = in.readUTF();
-                Sys.out.println(line);
+                    line = in.readUTF();
+                    System.out.println(line);
+
                 }
                 catch(IOException i)
                 {
                     System.out.println(i);
                 }
             }
+            System.out.println("Closing connection");
+
+            // close connection
             socket.close();
             in.close();
         }
@@ -44,10 +55,8 @@ public class Server
         }
     }
 
-
     public static void main(String args[])
     {
         Server server = new Server(5000);
-        //System.out.print(server);
     }
-
+} 
